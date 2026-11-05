@@ -12,13 +12,20 @@ const CMSAccessForm = dynamic(() => import("./components/CmsAccessForm"), {
   loading: () => <LoadingDots tone="green" label="Loading form" />,
 });
 
+// The Dashboard Login tab is hidden for now — only the Sanity (News Admin) login is
+// shown. Flip to `true` to bring the tab switcher and dashboard login back.
+const SHOW_DASHBOARD_LOGIN = false;
+
 type AdminClientProps = {
   initialTab: "cms" | "donation";
   error?: string;
 };
 
 export default function AdminClient({ initialTab, error }: AdminClientProps) {
-  const [activeTab, setActiveTab] = useState<"cms" | "donation">(initialTab);
+  const [selectedTab, setActiveTab] = useState<"cms" | "donation">(initialTab);
+  // With the dashboard login hidden, `?tab=donation` (still used by the middleware
+  // redirect and the dashboard logout) falls back to the CMS form.
+  const activeTab = SHOW_DASHBOARD_LOGIN ? selectedTab : "cms";
   // Held here, not in DashboardLogin — AnimatePresence remounts that form on every
   // tab switch, so a dismissal stored inside it would not survive the swap.
   const [redirectError, setRedirectError] = useState(
@@ -43,24 +50,26 @@ export default function AdminClient({ initialTab, error }: AdminClientProps) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7 }}
       >
-        <div className={styles.tabSwitcher}>
-          <button
-            className={`${styles.tabButton} ${
-              activeTab === "cms" ? styles.active : ""
-            }`}
-            onClick={() => setActiveTab("cms")}
-          >
-            News Admin
-          </button>
-          <button
-            className={`${styles.tabButton} ${
-              activeTab === "donation" ? styles.active : ""
-            }`}
-            onClick={() => setActiveTab("donation")}
-          >
-            Dashboard Login
-          </button>
-        </div>
+        {SHOW_DASHBOARD_LOGIN && (
+          <div className={styles.tabSwitcher}>
+            <button
+              className={`${styles.tabButton} ${
+                activeTab === "cms" ? styles.active : ""
+              }`}
+              onClick={() => setActiveTab("cms")}
+            >
+              News Admin
+            </button>
+            <button
+              className={`${styles.tabButton} ${
+                activeTab === "donation" ? styles.active : ""
+              }`}
+              onClick={() => setActiveTab("donation")}
+            >
+              Dashboard Login
+            </button>
+          </div>
+        )}
 
         <div className={styles.formWrapper}>
           <Suspense fallback={<LoadingDots tone="green" label="Loading form" />}>

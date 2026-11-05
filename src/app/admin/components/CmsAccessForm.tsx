@@ -11,6 +11,9 @@ export default function CMSAccessForm() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  // Set once the password is accepted. The Studio bundle is large, so the
+  // navigation can take several seconds; the form stays locked until it lands.
+  const [redirecting, setRedirecting] = useState(false);
 
   useEffect(() => {
     window.history.pushState(null, "", window.location.href);
@@ -28,6 +31,7 @@ export default function CMSAccessForm() {
 
   const handleAccess = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (loading) return;
     setLoading(true);
     setError("");
 
@@ -46,11 +50,12 @@ export default function CMSAccessForm() {
         data = { success: false, message: "Server returned invalid response" };
       }
 
-      setLoading(false);
-
       if (res.ok && data.success) {
+        // Keep `loading` true — this component unmounts when /studio renders.
+        setRedirecting(true);
         router.push("/studio");
       } else {
+        setLoading(false);
         setError(data.message || "Access denied");
       }
     } catch (err) {
@@ -101,13 +106,27 @@ export default function CMSAccessForm() {
             disabled={loading}
           />
           <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.96 }}
+            whileHover={loading ? undefined : { scale: 1.05 }}
+            whileTap={loading ? undefined : { scale: 0.96 }}
             type="submit"
             className="button"
             disabled={loading}
+            aria-busy={loading}
           >
-            {loading ? <LoadingDots tone="light" label="Verifying" /> : "Login"}
+            {loading ? (
+              <span className="button-loading">
+                <LoadingDots
+                  tone="light"
+                  size="sm"
+                  label={redirecting ? "Opening Studio" : "Verifying"}
+                />
+                <span aria-hidden="true">
+                  {redirecting ? "Opening Studio…" : "Verifying…"}
+                </span>
+              </span>
+            ) : (
+              "Login"
+            )}
           </motion.button>
         </motion.form>
 
