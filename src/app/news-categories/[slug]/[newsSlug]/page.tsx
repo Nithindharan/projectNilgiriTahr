@@ -19,7 +19,7 @@ export default async function NewsPage({ params }: NewsPageProps) {
       title,
       "slug": slug.current
     }`,
-    { slug }
+    { slug },
   );
 
   if (!category) {
@@ -70,10 +70,17 @@ export default async function NewsPage({ params }: NewsPageProps) {
         title,
         "slug": slug.current
       },
-      pdfAttachment{ asset->{ url } },
+       "downloadableResources": downloadableResources[] {
+    title,
+    description,
+    "fileUrl": file.asset->url,
+    "fileName": file.asset->originalFilename,
+    "mimeType": file.asset->mimeType,
+    "size": file.asset->size
+  }
        
         }`,
-    { newsSlug, catId: category._id }
+    { newsSlug, catId: category._id },
   );
 
   if (!news) {

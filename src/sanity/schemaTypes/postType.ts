@@ -1,11 +1,32 @@
-import { DocumentTextIcon, ImageIcon } from "@sanity/icons";
+import { DocumentTextIcon, ImageIcon, DocumentIcon } from "@sanity/icons";
+
 import { defineField, defineType } from "sanity";
+
+const downloadableFileTypes = [
+  "application/pdf",
+
+  // Videos
+  "video/*",
+
+  // PowerPoint
+  "application/vnd.ms-powerpoint",
+  "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+
+  // Excel
+  "application/vnd.ms-excel",
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+
+  // Word
+  "application/msword",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+].join(",");
 
 export const postType = defineType({
   name: "post",
   title: "Post",
   type: "document",
   icon: DocumentTextIcon,
+
   fields: [
     defineField({
       name: "title",
@@ -13,6 +34,7 @@ export const postType = defineType({
       type: "string",
       validation: (Rule) => Rule.required(),
     }),
+
     defineField({
       name: "slug",
       type: "slug",
@@ -20,11 +42,13 @@ export const postType = defineType({
       options: { source: "title", maxLength: 96 },
       validation: (Rule) => Rule.required(),
     }),
+
     defineField({
       name: "author",
       type: "reference",
       to: [{ type: "author" }],
     }),
+
     defineField({
       name: "mainImage",
       type: "image",
@@ -38,6 +62,8 @@ export const postType = defineType({
         }),
       ],
     }),
+
+    // Image Gallery
     defineField({
       name: "gallery",
       title: "Image Gallery",
@@ -62,17 +88,20 @@ export const postType = defineType({
                 }),
               ],
             }),
+
             defineField({
               name: "caption",
               title: "Caption / Description",
               type: "string",
             }),
+
             defineField({
               name: "body",
               title: "Related Paragraph / Content",
-              type: "blockContent", // rich text support for this image
+              type: "blockContent",
             }),
           ],
+
           preview: {
             select: {
               title: "caption",
@@ -94,6 +123,8 @@ export const postType = defineType({
       description:
         "Add one or more images with optional captions or paragraphs.",
     }),
+
+    // Category
     defineField({
       name: "category",
       title: "Post Category",
@@ -111,25 +142,91 @@ export const postType = defineType({
       type: "datetime",
       validation: (Rule) => Rule.required(),
     }),
+
     defineField({
       name: "excerpt",
       title: "Excerpt",
       type: "text",
     }),
+
+    // Main Rich Text Content
     defineField({
       name: "body",
+      title: "Post Content",
       type: "blockContent",
     }),
+
+    // Downloadable Resources
+    defineField({
+      name: "downloadableResources",
+      title: "Downloadable Resources",
+      type: "array",
+      of: [
+        {
+          type: "object",
+          name: "downloadableResource",
+          title: "Downloadable File",
+          icon: DocumentIcon,
+
+          fields: [
+            defineField({
+              name: "title",
+              title: "File Title",
+              type: "string",
+              validation: (Rule) => Rule.required(),
+            }),
+
+            defineField({
+              name: "description",
+              title: "Description",
+              type: "text",
+              rows: 2,
+            }),
+
+            defineField({
+              name: "file",
+              title: "Upload File",
+              type: "file",
+              options: {
+                accept: downloadableFileTypes,
+                storeOriginalFilename: true,
+              },
+              validation: (Rule) => Rule.required(),
+            }),
+          ],
+
+          preview: {
+            select: {
+              title: "title",
+              filename: "file.asset.originalFilename",
+            },
+            prepare({ title, filename }) {
+              return {
+                title: title || filename || "Downloadable File",
+                subtitle: filename || "No file uploaded",
+              };
+            },
+          },
+        },
+      ],
+
+      description:
+        "Upload PDFs, videos, PowerPoint, Excel and Word files for visitors to download.",
+    }),
+
+    // Legacy PDF field - retain temporarily for existing content
     defineField({
       name: "pdfAttachment",
-      title: "Attach PDF (optional)",
+      title: "Legacy PDF Attachment",
       type: "file",
+      hidden: true,
       options: {
         accept: ".pdf",
+        storeOriginalFilename: true,
       },
-      description: "Attach a downloadable PDF (if available)",
     }),
   ],
+
   preview: {
     select: {
       title: "title",
@@ -139,12 +236,16 @@ export const postType = defineType({
     },
     prepare(selection) {
       const { author, category } = selection;
+
       return {
         ...selection,
-        subtitle: `${author ? `by ${author}` : ""}${category ? ` | ${category}` : ""}`,
+        subtitle: `${author ? `by ${author}` : ""}${
+          category ? ` | ${category}` : ""
+        }`,
       };
     },
   },
+
   orderings: [
     {
       title: "Newest first",

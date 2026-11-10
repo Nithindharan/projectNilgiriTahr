@@ -131,6 +131,54 @@ export default function NewsClient({
         {/* Divider */}
         <div className={styles.sectionDivider}></div>
 
+        {/* Downloadable Resources Section */}
+        {news.downloadableResources &&
+          news.downloadableResources.length > 0 && (
+            <>
+              <section className={styles.downloadSection}>
+                <h2 className={styles.downloadTitle}>Downloadable Resources</h2>
+
+                <div className={styles.downloadList}>
+                  {news.downloadableResources.map(
+                    (resource: any, index: number) => {
+                      if (!resource.fileUrl) return null;
+
+                      return (
+                        <div
+                          key={resource.fileUrl || index}
+                          className={styles.downloadItem}
+                        >
+                          <div className={styles.downloadInfo}>
+                            <h3>{resource.title}</h3>
+
+                            {resource.description && (
+                              <p>{resource.description}</p>
+                            )}
+
+                            {resource.fileName && (
+                              <span>{resource.fileName}</span>
+                            )}
+                          </div>
+
+                          <a
+                            href={`${resource.fileUrl}?dl=`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={styles.downloadButton}
+                          >
+                            Download
+                          </a>
+                        </div>
+                      );
+                    },
+                  )}
+                </div>
+              </section>
+
+              <div className={styles.sectionDivider}></div>
+            </>
+          )}
+
         {/* Gallery Section */}
         {news.gallery && news.gallery.length > 0 && (
           <section className={styles.gallerySection}>
