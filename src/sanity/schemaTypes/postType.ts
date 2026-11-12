@@ -3,22 +3,19 @@ import { DocumentTextIcon, ImageIcon, DocumentIcon } from "@sanity/icons";
 import { defineField, defineType } from "sanity";
 
 const downloadableFileTypes = [
+  // Video
+  "video/mp4",
+
+  // PDF
   "application/pdf",
-
-  // Videos
-  "video/*",
-
-  // PowerPoint
-  "application/vnd.ms-powerpoint",
-  "application/vnd.openxmlformats-officedocument.presentationml.presentation",
 
   // Excel
   "application/vnd.ms-excel",
   "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
 
-  // Word
-  "application/msword",
-  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  // PowerPoint
+  "application/vnd.ms-powerpoint",
+  "application/vnd.openxmlformats-officedocument.presentationml.presentation",
 ].join(",");
 
 export const postType = defineType({
@@ -181,6 +178,23 @@ export const postType = defineType({
               title: "Description",
               type: "text",
               rows: 2,
+            }),
+            defineField({
+              name: "thumbnail",
+              title: "Video Thumbnail",
+              type: "image",
+              description:
+                "Optional preview image displayed before a video starts playing.",
+              options: {
+                hotspot: true,
+              },
+              fields: [
+                defineField({
+                  name: "alt",
+                  title: "Alternative Text",
+                  type: "string",
+                }),
+              ],
             }),
 
             defineField({

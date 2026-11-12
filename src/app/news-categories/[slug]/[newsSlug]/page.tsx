@@ -44,42 +44,118 @@ export default async function NewsPage({ params }: NewsPageProps) {
           downloadableFile{ asset->{ url, originalFilename } },
           category->{ title, "slug": slug.current }
         }`
-      : groq`*[(_type == "post") && slug.current == $newsSlug && category._ref == $catId][0]{
+      : groq`*[_type == "post" && slug.current == $newsSlug && category._ref == $catId][0]{
+  _id,
+  _type,
+  title,
+  excerpt,
+  publishedAt,
+
+  // Featured image
+  mainImage {
+    alt,
+    "url": asset->url,
+    "width": asset->metadata.dimensions.width,
+    "height": asset->metadata.dimensions.height,
+    "aspectRatio": asset->metadata.dimensions.aspectRatio
+  },
+
+  // Main article Portable Text
+  body[]{
+    ...,
+
+    // Inline images
+    _type == "image" => {
+      ...,
+      asset-> {
+        url,
+        metadata {
+          dimensions
+        }
+      }
+    },
+
+    // Inline videos/files
+    _type == "file" => {
+      ...,
+      asset-> {
+        url,
+        mimeType,
+        originalFilename,
+        size
+      }
+    }
+  },
+  downloadableResources[]{
+  _key,
+  title,
+  description,
+ thumbnail {
+    alt,
+    "url": asset->url,
+    "width": asset->metadata.dimensions.width,
+    "height": asset->metadata.dimensions.height,
+      "aspectRatio": asset->metadata.dimensions.aspectRatio
+  },
+  file {
+    asset-> {
       _id,
-      _type,
-      title,
-      excerpt,
-      body,
-      publishedAt,
-      mainImage{
-        asset->{
-         
-          url
-        },
-        alt
-      },
-       gallery[]{
-        image{
-          asset->{ url },
-          alt
-        },
-        caption,
-        body
-      },
-      category->{
-        title,
-        "slug": slug.current
-      },
-       "downloadableResources": downloadableResources[] {
-    title,
-    description,
-    "fileUrl": file.asset->url,
-    "fileName": file.asset->originalFilename,
-    "mimeType": file.asset->mimeType,
-    "size": file.asset->size
+      url,
+      originalFilename,
+      mimeType,
+      size
+    }
   }
-       
-        }`,
+},
+
+pdfAttachment {
+  asset-> {
+    _id,
+    url,
+    originalFilename,
+    mimeType,
+    size
+  }
+},
+
+  // Gallery
+  gallery[]{
+    _key,
+    caption,
+
+    image {
+      alt,
+      "url": asset->url,
+      "width": asset->metadata.dimensions.width,
+      "height": asset->metadata.dimensions.height,
+      "aspectRatio": asset->metadata.dimensions.aspectRatio
+    },
+
+    body[]{
+      ...,
+
+      _type == "image" => {
+        ...,
+        asset-> {
+          url,
+          metadata {
+            dimensions
+          }
+        }
+      },
+
+      _type == "file" => {
+        ...,
+        asset-> {
+          url,
+          mimeType,
+          originalFilename,
+          size
+        }
+      }
+    }
+  }
+}`,
     { newsSlug, catId: category._id },
   );
 
