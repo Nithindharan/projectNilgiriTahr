@@ -97,6 +97,19 @@ const groups: Group[] = [
           label: "Project Director",
           people: [
             {
+              name: "Tmt R. Padmawathe, I.F.S.",
+              image: "/members/Padmawathe.jpeg",
+              alt: "Tmt R. Padmawathe, I.F.S.",
+              role: "The Chief Conservator of Forests and Controlling Officer, Project Nilgiri Tahr",
+              about:
+                "Tmt R. Padmawathe, I.F.S., The Chief Conservator of Forests and Controlling Officer Project Nilgiri Tahr.",
+            },
+          ],
+        },
+        {
+          label: "Project Director",
+          people: [
+            {
               name: "SELVI.S.SENBAGAPRIYA, IFS",
               image: "/members/SENBAGAPRIYA.jpeg",
               alt: "selvi.s.senbagapriya",
@@ -223,13 +236,21 @@ const groups: Group[] = [
                 "Senior Research Fellow of Project Nilgiri Tahr, is a plant taxonomist and conservationist. He graduated in Botany from Government Arts College, Coimbatore. He worked as a biologist at Anamalai Tiger Reserve from 2018-2020. He has co-authored two books and published 8 research articles in reputed scientific journals.",
             },
             {
+              name: "Mr. N. Rajeshkumar",
+              image: "/members/Rajeshkumar.jpeg",
+              alt: "Mr. N. Rajeshkumar",
+              role: "Senior Research Fellow",
+              about:
+                "Mr. N. Rajeshkumar completed Bachelor of Science in Biochemistry (2008 to 2011), PSG College of Arts & Science, Coimbatore and completed Master of Science in Environmental Science (2011 to 2013) from Bharathiar University, Coimbatore. His area of interest are Ornithology, Animal Ecology, Plant-bird interaction, Wildlife Conservation, and management. He has on 13 years’ working experience in different roles and responsibilities as Naturalist, Research Fellow, Ornithologist, Conservation Biologist from different research institutions and Departments such as SACON, Thattekkad Bird Sanctuary, Idukki Wildlife Sanctuary, Silent Valley National Park. He contributed towards wildlife research and conservation in various aspects with 4 Technical reports, 9 Research Publications in International Peer-reviewed Journals and 5 newsletter articles. Also, he worked on species specific studies on Owls in Andaman Island, Hornbills in Munnar Landscape, Sri Lanka Frogmouth in Thattekkad Bird Sanctuary and Nilgiri Tahr in the Western Ghats. He was working as Senior Research Fellow in Project Nilgiri Tahr, Coimbatore.",
+            },
+            /*  {
               name: "K.Manigandan",
               image: "/members/k-manigandan.png",
               alt: "K.Manigandan",
               role: "Senior Research Fellow",
               about:
                 "Mr. K. Manigandan, Senior Research Fellow of Project Nilgiri Tahr, is a Wildlife Biologist. He received his Bachelor of Science in Zoology, Government Arts College, Coimbatore and Master of Science in Wildlife Biology from Government Arts College, The Nilgiris. He has studied Human Elephant Conflicts in Hosur Forest Division, Cauvery North Wildlife Sanctuary during his Master's. He worked as a Field Officer in A Rocha India (NGO), Bannerghatta National Park, Bangalore for Research and Monitoring of the Elephant Corridors. He is keen on Nature & Wildlife Conservation through Scientific Research and Conservation Education.",
-            },
+            }, */
             {
               name: "K.Ragavendran",
               image: "/members/k-ragavendran.png",
@@ -418,8 +439,8 @@ export default function TeamMembers() {
                       {slot.people.map((person, i) =>
                         renderPersonCard(
                           person,
-                          `${group.id}-${rowIndex}-${slotIndex}-${i}`
-                        )
+                          `${group.id}-${rowIndex}-${slotIndex}-${i}`,
+                        ),
                       )}
                     </div>
                   </div>
