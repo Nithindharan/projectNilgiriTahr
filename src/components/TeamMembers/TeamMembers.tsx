@@ -94,7 +94,7 @@ const groups: Group[] = [
     rows: [
       [
         {
-          label: "Project Director",
+          label: "CCF & Controlling Officer",
           people: [
             {
               name: "Tmt R. Padmawathe, I.F.S.",
@@ -102,7 +102,7 @@ const groups: Group[] = [
               alt: "Tmt R. Padmawathe, I.F.S.",
               role: "The Chief Conservator of Forests and Controlling Officer, Project Nilgiri Tahr",
               about:
-                "Tmt R. Padmawathe, I.F.S., The Chief Conservator of Forests and Controlling Officer Project Nilgiri Tahr.",
+                "Tmt R. Padmawathe, I.F.S., currently serves as the Chief Conservator of Forests and controlling officer Project Nilgiri Tahr. She is also currently the director of Advanced institute for wildlife conservation chennai. She belongs to the 2005 batch of the Indian Forest Service of Tamil Nadu. She has served in various capacities within the Tamil Nadu Forest Department, gaining experience in forest administration, wildlife management and biodiversity conservation. She has also served as Chief Conservator of Forests and Field Director of the Srivilliputhur Megamalai Tiger Reserve, Madurai circle. With her extensive experience in forest administration and wildlife conservation, she provides leadership and strategic direction to the Advanced Institute for Wildlife Conservation's scientific research, capacity-building initiatives, and conservation programmes. Her guidance helps strengthen scientific approaches to wildlife management, biodiversity conservation, and evidence-based conservation planning in Tamil Nadu.",
             },
           ],
         },
